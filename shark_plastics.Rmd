@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 Title: "Shark Microplastics"
 Author: "Morgan Lattomus"
@@ -87,3 +88,102 @@ car::Anova(sp_mod)
 
 
 
+=======
+---
+Title: "Shark Microplastics"
+Author: "Morgan Lattomus"
+Date: "2/15/2022"
+Output: 
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+```{r upload data.csv}
+shark_data <- read.csv('shark_data2.csv')
+# last line of data is at row 324, the last row (325) is the totals
+```
+
+#
+
+```{r testing to see if I can do things}
+sum(shark_data$Clear.Fiber)
+sum(shark_data$Blue.Fiber)
+sum(shark_data$Blue.Film)
+sum(shark_data$Blue.Foam)
+sum(shark_data$Black.Film)
+sum(shark_data$Black.Film)
+sum(shark_data$Red.Fiber)
+sum(shark_data$Red.Film)
+sum(shark_data$Purple.Fiber)
+sum(shark_data$Grey.Fiber)
+sum(shark_data$Green.Fiber)
+```
+
+```{r organizing sacrifice ids and id numbers to set up a merge}
+library(dplyr)
+uni_id <- paste(shark_data$Sacrifice.ID, shark_data$ID.., sep ='-')
+uni_id
+unique(uni_id)
+unique(uni_id)[-2]
+uni_id_full <- rep(unique(uni_id)[-2], each =4 )
+
+#now that that is set up, need to make a merge using ?merge, separate microplastics stuff from morphological... end goal is to make a box plot of my stuff! 
+```
+
+```{r merging?? not going well, coming back to this later}
+fib_agg <- aggregate(shark_data, list(ID..), sum)
+fibers <- merge(shark_data$Clear.Fiber , shark_data$Blue.Fiber , shark_data$Black.Fiber , shark_data$Red.Fiber , shark_data$Purple.Fiber , shark_data$Grey.Fiber , shark_data$Green.Fiber)
+
+fibers
+
+mtext("Microplastics Found in Stomachs", side = 3, line = -14, outer = TRUE , font = 2)
+```
+
+```{r boxplot wahoooooo}
+library(ggplot2)
+
+boxplot(Total ~ CommonName, data = shark_data, subset = Sample.Type=='S',
+        xlab='Species', ylab='# of MPs')
+
+mtext("Microplastics Found in Stomachs", side = 3, line = -2, outer = TRUE , font = 2)
+
+sp_mod1 <- glm(Total ~ CommonName, data = shark_data, subset = Sample.Type=='S',
+              family = 'poisson')
+summary(sp_mod1)
+# estimate psuedo r2
+pseudo_r2 = function(glm_mod) {
+    1 -  glm_mod$deviance / glm_mod$null.deviance
+}
+
+pseudo_r2(sp_mod1)
+car::Anova(sp_mod1)
+# literally no significance...it is SUCH small numbers on this omg
+```
+
+```{r trying to do the spiral valve boxplot and figuring out v signifiance}
+
+boxplot(Total ~ CommonName, data = shark_data, subset = Sample.Type=='V',
+        xlab='Species', ylab='# of MPs')
+
+mtext("Microplastics Found in Spiral Valves", side = 3, line = -2, outer = TRUE , font = 2)
+
+sp_mod <- glm(Total ~ CommonName, data = shark_data, subset = Sample.Type=='V',
+              family = 'poisson')
+summary(sp_mod)
+# estimate psuedo r2
+pseudo_r2 = function(glm_mod) {
+    1 -  glm_mod$deviance / glm_mod$null.deviance
+}
+
+pseudo_r2(sp_mod)
+car::Anova(sp_mod)
+#some significance...6% of data is due to differences in species
+```
+
+```{r trying to compare stomach v valve for significance}
+
+```
+
+
+
+>>>>>>> 38282d9309a088928fb02918a042d03afc31ff3e
