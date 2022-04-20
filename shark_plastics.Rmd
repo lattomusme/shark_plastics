@@ -22,7 +22,7 @@ uni_id_full <- rep(unique(uni_id)[-2], each =4 )
 
 shark_data$CommonName <- factor(shark_data$CommonName,
                                 levels = c('finetooth', 'sharpnose', 'blacktip',
-                                           'hammerhead'))
+                                           'hammer head'))
 
 #I am not entirely sure that this is needed anymore, but maybe check on that before deleted it!!
 ```
